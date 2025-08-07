@@ -12,7 +12,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			_, err := session(w, r)
 			if err != nil {
-				generateHTML(w, nil, "layout", "public_navbar", "signup")
+				generateAuthHTML(w, nil, "layout", "public_navbar", "signup")
 			} else {
 				http.Redirect(w, r, "/todos", 302)
 			}
@@ -38,9 +38,9 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		_, err := session(w, r)
 		if err != nil {
-			generateHTML(w, nil, "layout", "public_navbar", "signup")
+			generateAuthHTML(w, nil, "layout", "signup")
 		} else {
-			http.Redirect(w, r, "/todos", 302)
+			http.Redirect(w, r, "/", 302)
 		}
 	case http.MethodPost:
 		err := r.ParseForm()
@@ -63,9 +63,18 @@ func signup(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request) {
 	_, err := session(w, r)
 	if err != nil {
-		generateHTML(w, nil, "layout", "public_navbar", "login")
+		generateAuthHTML(w, nil, "layout", "login")
 	} else {
-		http.Redirect(w, r, "/todos", 302)
+		http.Redirect(w, r, "/", 302)
+	}
+}
+
+func forgotPassword(w http.ResponseWriter, r *http.Request) {
+	_, err := session(w, r)
+	if err != nil {
+		generateAuthHTML(w, nil, "layout", "password")
+	} else {
+		http.Redirect(w, r, "/", 302)
 	}
 }
 

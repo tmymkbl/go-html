@@ -12,17 +12,42 @@ import (
 	"go-sample-todo/config"
 )
 
-func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
+func generatePublicHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
-		fmt.Println("Output: " + file + ".html")
-		// files = append(files, fmt.Sprintf("app/views/templates/%s.html", file))
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/%s.html", file))
+		files = append(files, fmt.Sprintf("app/views/template_bootstrap/public/%s.html", file))
 	}
 
 	templates := template.Must(template.ParseFiles(files...))
-	// templates.ExecuteTemplate(writer, "layout", data)
-	templates.Execute(writer, data)
+	// if data == nil {
+	// 	templates.Execute(writer, "layout")
+	// } else {
+	templates.ExecuteTemplate(writer, "layout", data)
+	// }
+}
+
+func generateAuthHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
+	var files []string
+	for _, file := range filenames {
+		files = append(files, fmt.Sprintf("app/views/template_bootstrap/auth/%s.html", file))
+	}
+
+	templates := template.Must(template.ParseFiles(files...))
+	// if data == nil {
+	// 	templates.Execute(writer, "layout")
+	// } else {
+	templates.ExecuteTemplate(writer, "layout", data)
+	// }
+}
+
+func generateAdminHTML(writer http.ResponseWriter, data any, filenames ...string) {
+	var files []string
+	for _, file := range filenames {
+		fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/admin/%s.html", file))
+		files = append(files, fmt.Sprintf("app/views/template_bootstrap/admin/%s.html", file))
+	}
+	templates := template.Must(template.ParseFiles(files...))
+	templates.ExecuteTemplate(writer, "admin_layout", data)
 }
 
 func session(writer http.ResponseWriter, request *http.Request) (sess models.Session, err error) {
@@ -55,20 +80,31 @@ func StartMainServer() {
 	// files := http.FileServer(http.Dir(config.Config.Static))
 	// http.Handle("/static/", http.StripPrefix("/static/", files))
 	files := http.FileServer(http.Dir(config.Config.Assets))
-	http.Handle("/assets/", http.StripPrefix("/assets/", files))
+	http.Handle("GET /assets/", http.StripPrefix("/assets/", files))
 
-	http.HandleFunc("/", top) //top
-	http.HandleFunc("/signup", signup)
-	http.HandleFunc("/login", login)
-	http.HandleFunc("/logout", logout)
-	http.HandleFunc("/authenticate", authenticate)
-	http.HandleFunc("/todos", index)
+	adminURL := config.Config.AdminURL
+	http.HandleFunc(adminURL, adminTop) //開発途中
+	http.HandleFunc("/", index)
+	http.HandleFunc("GET /about", about)
+	http.HandleFunc("GET /contact", contact)
+	http.HandleFunc("GET /blog-home", blogHome)
+	http.HandleFunc("GET /blog-post", blogPost)
+	http.HandleFunc("GET /faq", faq)
+	http.HandleFunc("GET /portfolio-item", portfolioItem)
+	http.HandleFunc("GET /portfolio-overview", portfolioOverview)
+	http.HandleFunc("GET /pricing", pricing)
+	http.HandleFunc("GET /signup", signup)
+	http.HandleFunc("GET /login", login)
+	http.HandleFunc("GET /logout", logout)
+	http.HandleFunc("GET /authenticate", authenticate)
+	http.HandleFunc("GET /forgot_password", forgotPassword)
+	http.HandleFunc("/todos", todos)
 	http.HandleFunc("/todos/new", todoNew)
 	http.HandleFunc("/todos/save", todoSave)
 	http.HandleFunc("/todos/edit/", parseURL(todoEdit))
 	http.HandleFunc("/todos/update/", parseURL(todoUpdate))
 	http.HandleFunc("/todos/delete/", parseURL(todoDelete))
-
-	return
-	// return http.ListenAndServe(":"+config.Config.Port, nil)
+	http.HandleFunc("GET /e401", e401)
+	http.HandleFunc("GET /e404", e404)
+	http.HandleFunc("GET /e500", e500)
 }

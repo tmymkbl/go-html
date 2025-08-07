@@ -14,6 +14,7 @@ type ConfigList struct {
 	LogFile   string
 	Static    string
 	Assets    string
+	AdminURL  string
 }
 
 var Config ConfigList
@@ -35,5 +36,6 @@ func LoadConfig() {
 		LogFile:   cfg.Section("web").Key("logfile").String(),
 		Static:    cfg.Section("web").Key("static").String(),
 		Assets:    cfg.Section("web").Key("assets").String(),
+		AdminURL:  cfg.Section("web").Key("admin_url").String(),
 	}
 }

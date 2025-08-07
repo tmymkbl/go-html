@@ -8,17 +8,43 @@ import (
 	"go-sample-todo/app/models"
 )
 
-func top(w http.ResponseWriter, r *http.Request) {
-	_, err := session(w, r)
-	if err != nil {
-		// generateHTML(w, nil, "layout", "public_navbar", "top")
-		generateHTML(w, nil, "index")
-	} else {
-		http.Redirect(w, r, "/todos", 302)
-	}
+func index(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "index", "footer")
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
+func about(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "about", "footer")
+}
+
+func blogHome(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "blog-home", "footer")
+}
+
+func blogPost(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "blog-post", "footer")
+}
+
+func contact(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "contact", "footer")
+}
+
+func faq(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "faq", "footer")
+}
+
+func portfolioItem(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "portfolio-item", "footer")
+}
+
+func portfolioOverview(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "portfolio-overview", "footer")
+}
+
+func pricing(w http.ResponseWriter, r *http.Request) {
+	generatePublicHTML(w, nil, "layout", "header", "pricing", "footer")
+}
+
+func todos(w http.ResponseWriter, r *http.Request) {
 	sess, err := session(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/", 302)
@@ -29,7 +55,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		}
 		todos, _ := user.GetTodosByUser()
 		user.Todos = todos
-		generateHTML(w, user, "layout", "private_navbar", "index")
+		generatePublicHTML(w, user, "layout", "private_navbar", "todo")
 	}
 }
 
@@ -38,7 +64,7 @@ func todoNew(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Redirect(w, r, "/login", 302)
 	} else {
-		generateHTML(w, nil, "layout", "private_navbar", "todo_new")
+		generatePublicHTML(w, nil, "layout", "private_navbar", "todo_new")
 	}
 }
 
@@ -84,7 +110,7 @@ func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
 			log.Fatalln(err)
 		}
 		fmt.Println(t)
-		generateHTML(w, t, "layout", "private_navbar", "todo_edit")
+		generatePublicHTML(w, t, "layout", "private_navbar", "todo_edit")
 	}
 }
 
