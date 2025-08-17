@@ -24,21 +24,34 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">ログイン</h3></div>
                                     <div class="card-body">
-                                        <form role="form" action="/authenticate" method="post">
+                                        <form role="form" action="/login" method="post">
                                             <div class="form-floating mb-3">
-                                                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="name@example.com" required autofocus>
+                                                <input type="email" name="email" id="inputEmail" class="form-control" placeholder="name@example.com" required autofocus
+                                                {{if .input.Email}}
+                                                value="{{.input.Email}}"
+                                                {{end}}
+                                                >
                                                 <label for="inputEmail">Eメールアドレス</label>
+                                                {{if .error.LoginUser_Email}}
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    {{.error.LoginUser_Email}}
+                                                </div>
+                                                {{end}}
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
                                                 <label for="inputPassword">パスワード</label>
+                                                {{if .error.LoginUser_Password}}
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    {{.error.LoginUser_Password}}
+                                                </div>
+                                                {{end}}
                                             </div>
-                                            <!--
-                                            <div class="form-check mb-3">
-                                                <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                                                <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
+                                            {{if .error.main}}
+                                            <div class="invalid-feedback" style="display: block;">
+                                                {{.error.main}}
                                             </div>
-                                            -->
+                                            {{end}}
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a class="small" href="/forgot_password">パスワードをお忘れですか?</a>
                                                 <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>

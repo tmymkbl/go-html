@@ -1,0 +1,17 @@
+{{define "user_layout"}}
+<!DOCTYPE html>
+<html lang="en">
+    {{template "head"}}
+    <body class="sb-nav-fixed">
+        {{template "nav"}}
+        <div id="layoutSidenav">
+            {{template "sidenav"}}
+            <div id="layoutSidenav_content">
+                {{template "content" . }}
+                {{template "footer"}}
+            </div>  <!-- end layoutSidenav_content -->
+        </div> <!-- end layoutSidenav -->
+        {{template "scripts"}}
+    </body>
+</html>
+{{end}}

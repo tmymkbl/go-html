@@ -5,10 +5,13 @@ import (
 	"database/sql"
 	"fmt"
 	"go-sample-todo/config"
-	"log"
+
+	"go-sample-todo/app/logs"
+	"go-sample-todo/utils"
 
 	"github.com/google/uuid"
 
+	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -22,39 +25,79 @@ const (
 	tableNameSession = "sessions"
 )
 
-func init() {
-	Db, err = sql.Open(config.Config.SQLDriver, config.Config.DbName)
+func InitDb() {
+	file, line, funcName := utils.GetCurrentInfo()
+	logs.Log.Debug("DB access init ", "funcName", funcName, "file", file, "line", line)
+
+	if config.Config.SQLDriver == "sqlite3" {
+		Db, err = sql.Open(config.Config.SQLDriver, config.Config.DbName)
+	} else if config.Config.SQLDriver == "mysql" {
+		// Db, err := sql.Open("mysql", "ユーザー名:パスワード@tcp(ホスト:ポート)/データベース名?parseTime=true&loc=Asia%2FTokyo")
+		// Db, err = sql.Open(config.Config.SQLDriver,
+		// fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Asia/Tokyo",
+		var con string = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+			config.Config.DbUser,
+			config.Config.DbPasswd,
+			config.Config.DbHost,
+			config.Config.DbPort,
+			config.Config.DbName) + "?charset=utf8mb4&parseTime=True&loc=Asia%2FTokyo"
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Debug("DB access init ", "con", con, "func", funcName, "file", file, "line", line)
+		Db, err = sql.Open(config.Config.SQLDriver, con)
+	}
 	if err != nil {
-		log.Fatalln("DB CREATE ERROR")
-		log.Fatalln(err)
+		// log.Error("DB ACCESS ERROR", "error", err)
+		// log.Fatalln("DB ACEESS ERROR")
+		// log.Fatalln(err)
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Error("DB connect ", "error", err, "tableNameUser", tableNameUser, "funcName", funcName, "file", file, "line", line)
 	}
 
 	cmdU := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s(
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		uuid STRING NOT NULL UNIQUE,
-		name STRING,
-		email STRING,
-		password STRING,
-		created_at DATETIME)`, tableNameUser)
+		id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+		uuid VARCHAR(255) NOT NULL UNIQUE,
+		name VARCHAR(255),
+		email VARCHAR(255),
+		password VARCHAR(255),
+		created_at TIMESTAMP)`, tableNameUser)
 
-	Db.Exec(cmdU)
+	_, err = Db.Exec(cmdU)
+	if err != nil {
+		// log.Println(err.Error())
+		// log.Fatalf("%s TABLE CREATE ERROR\n", tableNameUser)
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Error("DB connect ", "error", err, "tableNameUser", tableNameUser, "funcName", funcName, "file", file, "line", line)
+	}
 
 	cmdT := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s(
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
 		content TEXT,
-		user_id INTEGER,
-		created_at DATETIME)`, tableNameTodo)
+		user_id INTEGER UNSIGNED ,
+		created_at TIMESTAMP)`, tableNameTodo)
 
-	Db.Exec(cmdT)
+	_, err = Db.Exec(cmdT)
+	if err != nil {
+		// log.Fatalf("%s TABLE CREATE ERROR\n", tableNameTodo)
+		// log.Fatalln(err.Error())
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Error("DB connect ", "error", err, "tableNameTodo", tableNameTodo, "funcName", funcName, "file", file, "line", line)
+	}
 
 	cmdS := fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s(
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		uuid STRING NOT NULL UNIQUE,
-		email STRING,
-		user_id INTEGER,
-		created_at DATETIME)`, tableNameSession)
+		id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+		uuid VARCHAR(255) NOT NULL UNIQUE,
+		name VARCHAR(255) NOT NULL,
+		email VARCHAR(255) NOT NULL,
+		user_id INTEGER UNSIGNED,
+		created_at TIMESTAMP)`, tableNameSession)
 
-	Db.Exec(cmdS)
+	_, err = Db.Exec(cmdS)
+	if err != nil {
+		// log.Fatalf("%s TABLE CREATE ERROR\n", tableNameSession)
+		// log.Fatalln(err.Error())
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Error("DB connect ", "error", err, "tableNameSession", tableNameSession, "funcName", funcName, "file", file, "line", line)
+	}
 }
 
 func createUUID() (uuidobj uuid.UUID) {

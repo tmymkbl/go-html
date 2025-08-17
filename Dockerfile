@@ -20,12 +20,13 @@ RUN chmod -R 1777 "$GODIR"
 WORKDIR "$GOAPP"
 RUN cd "$GOAPP"
 
-#RUN go get github.com/mattn/go-sqlite3
-#RUN go get -u github.com/gin-gonic/gin 
-#RUN go install github.com/air-verse/air@latest 
-
 RUN go mod init go-sample-todo 
 RUN go mod tidy
+
+#RUN go get github.com/mattn/go-sqlite3
+#RUN go get -u github.com/go-sql-driver/mysql
+#RUN go get -u github.com/gin-gonic/gin 
+#RUN go install github.com/air-verse/air@latest 
 
 #RUN air init
 #RUN cd "$GOAPP/cmd"; air &

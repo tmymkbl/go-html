@@ -12,18 +12,23 @@ import (
 	"go-sample-todo/config"
 )
 
-func generatePublicHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
+func generatePublicHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
 		files = append(files, fmt.Sprintf("app/views/template_bootstrap/public/%s.html", file))
 	}
 
 	templates := template.Must(template.ParseFiles(files...))
-	// if data == nil {
-	// 	templates.Execute(writer, "layout")
-	// } else {
-	templates.ExecuteTemplate(writer, "layout", data)
-	// }
+	templates.ExecuteTemplate(w, "layout", data)
+}
+
+func generateErrorHTML(writer http.ResponseWriter, filenames ...string) {
+	var files []string
+	for _, file := range filenames {
+		files = append(files, fmt.Sprintf("app/views/template_bootstrap/%s.html", file))
+	}
+	templates := template.Must(template.ParseFiles(files...))
+	templates.ExecuteTemplate(writer, "content", nil)
 }
 
 func generateAuthHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
@@ -40,6 +45,16 @@ func generateAuthHTML(writer http.ResponseWriter, data interface{}, filenames ..
 	// }
 }
 
+func generateUserHTML(writer http.ResponseWriter, data any, filenames ...string) {
+	var files []string
+	for _, file := range filenames {
+		fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
+		files = append(files, fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
+	}
+	templates := template.Must(template.ParseFiles(files...))
+	templates.ExecuteTemplate(writer, "user_layout", data)
+}
+
 func generateAdminHTML(writer http.ResponseWriter, data any, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
@@ -50,12 +65,13 @@ func generateAdminHTML(writer http.ResponseWriter, data any, filenames ...string
 	templates.ExecuteTemplate(writer, "admin_layout", data)
 }
 
-func session(writer http.ResponseWriter, request *http.Request) (sess models.Session, err error) {
+// func session(writer http.ResponseWriter, request *http.Request) (sess models.Session, err error) {
+func session(_ http.ResponseWriter, request *http.Request) (sess models.Session, err error) {
 	cookie, err := request.Cookie("_cookie")
 	if err == nil {
 		sess = models.Session{UUID: cookie.Value}
 		if ok, _ := sess.CheckSession(); !ok {
-			err = errors.New("Invalid session")
+			err = errors.New("invalid session")
 		}
 	}
 	return
@@ -76,7 +92,7 @@ func parseURL(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc
 	}
 }
 
-func StartMainServer() {
+func SetRoute() {
 	// files := http.FileServer(http.Dir(config.Config.Static))
 	// http.Handle("/static/", http.StripPrefix("/static/", files))
 	files := http.FileServer(http.Dir(config.Config.Assets))
@@ -84,7 +100,6 @@ func StartMainServer() {
 
 	adminURL := config.Config.AdminURL
 	http.HandleFunc(adminURL, adminTop) //開発途中
-	http.HandleFunc("/", index)
 	http.HandleFunc("GET /about", about)
 	http.HandleFunc("GET /contact", contact)
 	http.HandleFunc("GET /blog-home", blogHome)
@@ -94,17 +109,29 @@ func StartMainServer() {
 	http.HandleFunc("GET /portfolio-overview", portfolioOverview)
 	http.HandleFunc("GET /pricing", pricing)
 	http.HandleFunc("GET /signup", signup)
+	http.HandleFunc("POST /signup", signupAuth)
 	http.HandleFunc("GET /login", login)
-	http.HandleFunc("GET /logout", logout)
-	http.HandleFunc("GET /authenticate", authenticate)
+	http.HandleFunc("POST /login", loginAuth)
+	http.HandleFunc("/logout", logout)
 	http.HandleFunc("GET /forgot_password", forgotPassword)
-	http.HandleFunc("/todos", todos)
+	http.HandleFunc("GET /todos", todos)
 	http.HandleFunc("/todos/new", todoNew)
 	http.HandleFunc("/todos/save", todoSave)
 	http.HandleFunc("/todos/edit/", parseURL(todoEdit))
 	http.HandleFunc("/todos/update/", parseURL(todoUpdate))
 	http.HandleFunc("/todos/delete/", parseURL(todoDelete))
-	http.HandleFunc("GET /e401", e401)
-	http.HandleFunc("GET /e404", e404)
-	http.HandleFunc("GET /e500", e500)
+	http.HandleFunc("GET /user/blog-post", userBlogPost)
+	http.HandleFunc("/", index)    // トップページ及び不明URLの処理
+	http.HandleFunc("/test", test) // 軽いテスト用の実装
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "test")
+	a := []byte{0x68, 0x6f, 0x67, 0x65}
+	fmt.Fprintln(w, string(a))
+	b := []byte("foo")
+	fmt.Fprintln(w, b)
+	fmt.Fprintln(w, string(b))
+	c := []string{"foo", "bar", "baz"}
+	fmt.Fprintln(w, c)
 }

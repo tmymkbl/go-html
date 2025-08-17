@@ -18,6 +18,6 @@ func adminTop(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		generateAdminHTML(w, data, "admin_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
 	} else {
-		http.Redirect(w, r, "/", 302)
+		http.Redirect(w, r, "/", http.StatusFound)
 	}
 }

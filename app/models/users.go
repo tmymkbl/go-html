@@ -18,6 +18,7 @@ type User struct {
 type Session struct {
 	ID        int
 	UUID      string
+	Name      string
 	Email     string
 	UserID    int
 	CreatedAt time.Time
@@ -96,21 +97,23 @@ func (u *User) CreateSession() (session Session, err error) {
 	session = Session{}
 	cmd1 := `insert into sessions (
 		uuid, 
+		name, 
 		email, 
 		user_id, 
-		created_at) values (?, ?, ?, ?)`
+		created_at) values (?, ?, ?, ?, ?)`
 
-	_, err = Db.Exec(cmd1, createUUID(), u.Email, u.ID, time.Now())
+	_, err = Db.Exec(cmd1, createUUID(), u.Name, u.Email, u.ID, time.Now())
 	if err != nil {
 		log.Println(err)
 	}
 
-	cmd2 := `select id, uuid, email, user_id, created_at
+	cmd2 := `select id, uuid, name, email, user_id, created_at
 	 from sessions where user_id = ? and email = ?`
 
 	err = Db.QueryRow(cmd2, u.ID, u.Email).Scan(
 		&session.ID,
 		&session.UUID,
+		&session.Name,
 		&session.Email,
 		&session.UserID,
 		&session.CreatedAt)
@@ -119,12 +122,13 @@ func (u *User) CreateSession() (session Session, err error) {
 }
 
 func (sess *Session) CheckSession() (valid bool, err error) {
-	cmd := `select id, uuid, email, user_id, created_at
+	cmd := `select id, uuid, name, email, user_id, created_at
 	 from sessions where uuid = ?`
 
 	err = Db.QueryRow(cmd, sess.UUID).Scan(
 		&sess.ID,
 		&sess.UUID,
+		&sess.Name,
 		&sess.Email,
 		&sess.UserID,
 		&sess.CreatedAt)

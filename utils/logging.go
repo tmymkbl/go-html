@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"runtime"
 )
 
 func LoggingSettings(logFile string) {
@@ -14,4 +15,13 @@ func LoggingSettings(logFile string) {
 	multiLogFile := io.MultiWriter(os.Stdout, logfile)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 	log.SetOutput(multiLogFile)
+}
+
+func GetCurrentInfo() (string, int, string) {
+	pc, file, line, ok := runtime.Caller(1)
+	if !ok {
+		return "unknown", 0, "unknown"
+	}
+	funcName := runtime.FuncForPC(pc).Name()
+	return file, line, funcName
 }
