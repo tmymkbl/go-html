@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"net/http/cgi"
 	"os"
 
 	"go-sample-todo/app/controllers"
@@ -44,8 +45,16 @@ func main() {
 	controllers.SetRoute()
 
 	logs.Log.Info("start Server ", "port", config.Config.Port)
-	err := http.ListenAndServe(":"+config.Config.Port, nil)
-	if err != nil {
-		fmt.Println("Error starting server:", err)
+
+	if config.Config.ServerMode == "cgi" {
+		err := cgi.Serve(nil)
+		if err != nil {
+			fmt.Println("Error starting server:", err)
+		}
+	} else {
+		err := http.ListenAndServe(":"+config.Config.Port, nil)
+		if err != nil {
+			fmt.Println("Error starting server:", err)
+		}
 	}
 }

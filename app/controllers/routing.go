@@ -45,14 +45,14 @@ func generateAuthHTML(writer http.ResponseWriter, data interface{}, filenames ..
 	// }
 }
 
-func generateUserHTML(writer http.ResponseWriter, data any, filenames ...string) {
+func generateUserHTML(w http.ResponseWriter, data any, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
 		fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
 		files = append(files, fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
 	}
 	templates := template.Must(template.ParseFiles(files...))
-	templates.ExecuteTemplate(writer, "user_layout", data)
+	templates.ExecuteTemplate(w, "user_layout", data)
 }
 
 func generateAdminHTML(writer http.ResponseWriter, data any, filenames ...string) {
@@ -112,16 +112,20 @@ func SetRoute() {
 	http.HandleFunc("POST /signup", signupAuth)
 	http.HandleFunc("GET /login", login)
 	http.HandleFunc("POST /login", loginAuth)
-	http.HandleFunc("/logout", logout)
 	http.HandleFunc("GET /forgot_password", forgotPassword)
-	http.HandleFunc("GET /todos", todos)
-	http.HandleFunc("/todos/new", todoNew)
-	http.HandleFunc("/todos/save", todoSave)
-	http.HandleFunc("/todos/edit/", parseURL(todoEdit))
-	http.HandleFunc("/todos/update/", parseURL(todoUpdate))
-	http.HandleFunc("/todos/delete/", parseURL(todoDelete))
+
+	http.HandleFunc("/user/logout", logout)
+	http.HandleFunc("GET /user/profile", userProfile)
+	http.HandleFunc("GET /user/todos", todos)
+	http.HandleFunc("/user/todos/new", todoNew)
+	http.HandleFunc("/user/todos/save", todoSave)
+	http.HandleFunc("/user/todos/edit/", parseURL(todoEdit))
+	http.HandleFunc("/user/todos/update/", parseURL(todoUpdate))
+	http.HandleFunc("/user/todos/delete/", parseURL(todoDelete))
 	http.HandleFunc("GET /user/blog-post", userBlogPost)
-	http.HandleFunc("/", index)    // トップページ及び不明URLの処理
+
+	http.HandleFunc("/", index) // トップページ及び不明URLの処理
+
 	http.HandleFunc("/test", test) // 軽いテスト用の実装
 }
 

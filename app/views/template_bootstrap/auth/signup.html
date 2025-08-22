@@ -26,34 +26,56 @@
                                     <div class="card-body">
                                         <form role="form" action="/signup" method="post">
                                             <div class="row mb-3">
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div class="form-floating">
-                                                        <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" />
-                                                        <label for="inputLastName">姓</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 mb-md-0">
-                                                        <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" name="name"/>
-                                                        <label for="inputFirstName">名</label>
+                                                        <input class="form-control" id="inputName" type="text" placeholder="Enter your name" name="name"
+                                                        {{if .input.Name}}
+                                                        value="{{.input.Name}}"
+                                                        {{end}}
+                                                        />
+                                                        <label for="inputLastName">氏名</label>
+                                                        {{if .error.SignupUser_Name}}
+                                                        <div class="invalid-feedback" style="display: block;">
+                                                            {{.error.SignupUser_Name}}
+                                                        </div>
+                                                        {{end}}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" name="email"/>
+                                                <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" name="email"
+                                                {{if .input.Email}}
+                                                value="{{.input.Email}}"
+                                                {{end}}
+                                                />
                                                 <label for="inputEmail">Eメールアドレス</label>
+                                                {{if .error.SignupUser_Email}}
+                                                <div class="invalid-feedback" style="display: block;">
+                                                    {{.error.SignupUser_Email}}
+                                                </div>
+                                                {{end}}
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
                                                         <input class="form-control" id="inputPassword" type="password" placeholder="password" name="password"/>
                                                         <label for="inputPassword">パスワード</label>
+                                                        {{if .error.SignupUser_Password}}
+                                                        <div class="invalid-feedback" style="display: block;">
+                                                            {{.error.SignupUser_Password}}
+                                                        </div>
+                                                        {{end}}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-floating mb-3 mb-md-0">
                                                         <input class="form-control" id="inputPasswordConfirm" type="password" placeholder="Confirm password" name="confirmpassword"/>
                                                         <label for="inputPasswordConfirm">パスワード確認</label>
+                                                        {{if .error.SignupUser_ConfirmPassword}}
+                                                        <div class="invalid-feedback" style="display: block;">
+                                                            {{.error.SignupUser_ConfirmPassword}}
+                                                        </div>
+                                                        {{end}}
                                                     </div>
                                                 </div>
                                             </div>

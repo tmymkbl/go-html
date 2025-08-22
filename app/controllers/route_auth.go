@@ -22,10 +22,10 @@ type LoginUser struct {
 }
 
 type SignupUser struct {
-	Name            string `validate:"required,max=255"`
-	Email           string `validate:"required,email,min=7,max=128"`
-	Password        string `validate:"required,min=8,max=32"`
-	ConfirmPassword string `validate:"required,eqfield=Password,min=8,max=32"`
+	Name            string `json:"name" validate:"required,min=2,max=255"`
+	Email           string `json:"email" validate:"required,email,min=7,max=128"`
+	Password        string `json:"password" validate:"required,min=8,max=32"`
+	ConfirmPassword string `json:"confirm_password" validate:"required,eqfield=Password,min=8,max=32"`
 }
 
 // validateAuthenticate は login form data の検証を行います。
@@ -40,6 +40,7 @@ func validateSignupAuth(r *http.Request) (map[string]any, bool) {
 		logs.Log.Info("signup validation error ", "error", err, "file", file, "func", funcName, "line", line)
 		return map[string]any{}, false
 	}
+	// retList はテンプレートに渡すデータを格納するマップ
 	retList := map[string]any{
 		"input": map[string]string{
 			"Name":            r.PostFormValue("name"),
@@ -49,6 +50,12 @@ func validateSignupAuth(r *http.Request) (map[string]any, bool) {
 		},
 		"error": map[string]string{},
 	}
+	// fieldName := map[string]string{
+	// 	"Name":            "氏名",
+	// 	"Email":           "Eメールアドレス",
+	// 	"Password":        "パスワード",
+	// 	"ConfirmPassword": "パスワード確認",
+	// }
 
 	validate := validator.New()
 	ja_translations.RegisterDefaultTranslations(validate, trans)
@@ -66,6 +73,7 @@ func validateSignupAuth(r *http.Request) (map[string]any, bool) {
 		logs.Log.Debug("signup validation error ", "errors", jaErrMsg, "file", file, "func", funcName, "line", line)
 		errorMap := retList["error"].(map[string]string)
 		for key, value := range jaErrMsg {
+			// value_ja := strings.Replace(value, key, fieldName[key], -1)
 			errorMap[strings.Replace(key, ".", "_", -1)] = value
 		}
 		retList["error"] = errorMap
@@ -77,24 +85,6 @@ func validateSignupAuth(r *http.Request) (map[string]any, bool) {
 }
 
 func signupAuth(w http.ResponseWriter, r *http.Request) {
-	// err := r.ParseForm()
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-	// user := models.User{
-	// 	Name:     r.PostFormValue("name"),
-	// 	Email:    r.PostFormValue("email"),
-	// 	PassWord: r.PostFormValue("password"),
-	// }
-	// if err := user.CreateUser(); err != nil {
-	// 	log.Println(err)
-	// }
-
-	// http.Redirect(w, r, "/", 200)
-
-	// retList := map[string]string{
-	// 	"Email": "Eメールの入力が誤っています",
-	// }
 	retList, ok := validateSignupAuth(r)
 	if !ok {
 		generateAuthHTML(w, retList, "layout", "signup")
@@ -130,32 +120,6 @@ func signupAuth(w http.ResponseWriter, r *http.Request) {
 }
 
 func signup(w http.ResponseWriter, r *http.Request) {
-	/*
-		if r.Method == "GET" {
-			_, err := session(w, r)
-			if err != nil {
-				generateAuthHTML(w, nil, "layout", "public_navbar", "signup")
-			} else {
-				http.Redirect(w, r, "/todos", 302)
-			}
-		} else if r.Method == "POST" {
-			err := r.ParseForm()
-			if err != nil {
-				log.Println(err)
-			}
-			user := models.User{
-				Name:     r.PostFormValue("name"),
-				Email:    r.PostFormValue("email"),
-				PassWord: r.PostFormValue("password"),
-			}
-			if err := user.CreateUser(); err != nil {
-				log.Println(err)
-			}
-
-			http.Redirect(w, r, "/", 302)
-		}
-	*/
-
 	_, err := session(w, r)
 	if err != nil {
 		generateAuthHTML(w, nil, "layout", "signup")
@@ -195,15 +159,6 @@ func validateLoginAuth(r *http.Request) (map[string]any, bool) {
 		jaErrMsg := e.Translate(trans) // jaErrMsg は map[string]string 型で、キーは LoginUser.フィールド名、値は日本語のエラーメッセージです。
 		file, line, funcName := utils.GetCurrentInfo()
 		logs.Log.Debug("login validation error ", "errors", jaErrMsg, "file", file, "func", funcName, "line", line)
-		// errorMap := retList["error"].(map[string]string)
-		// for _, v := range vErr.(validator.ValidationErrors) {
-		// 	v.Translate(trans)
-		// 	file, line, funcName := utils.GetCurrentInfo()
-		// 	logs.Log.Debug("login validation error ", "message", v.Error(), "field", v.Field(), "tag", v.Tag(), "param", v.Param(), "file", file, "func", funcName, "line", line)
-		// 	// fmt.Println(errv.Field(), errv.Tag(), errv.Param())
-		// 	errorMap[v.Field()] = v.Tag() + v.Param()
-		// }
-		// retList["error"] = errorMap
 		errorMap := retList["error"].(map[string]string)
 		for key, value := range jaErrMsg {
 			errorMap[strings.Replace(key, ".", "_", -1)] = value

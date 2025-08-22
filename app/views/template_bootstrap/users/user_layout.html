@@ -1,14 +1,14 @@
 {{define "user_layout"}}
 <!DOCTYPE html>
 <html lang="en">
-    {{template "head"}}
+    {{template "head" .}}
     <body class="sb-nav-fixed">
-        {{template "nav"}}
+        {{template "nav" .}}
         <div id="layoutSidenav">
-            {{template "sidenav"}}
+            {{template "sidenav" .}}
             <div id="layoutSidenav_content">
                 {{template "content" . }}
-                {{template "footer"}}
+                {{template "footer" .}}
             </div>  <!-- end layoutSidenav_content -->
         </div> <!-- end layoutSidenav -->
         {{template "scripts"}}

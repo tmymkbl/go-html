@@ -9,49 +9,48 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	// indexData := map[string]string{}
-	// sess, err := session(w, r)
 	sess, _ := session(w, r)
-	// if err == nil {
-	// 	indexData["login"] = sess.Email
-	// }
-	if r.RequestURI == "/" {
-		generatePublicHTML(w, sess, "layout", "header", "index", "footer")
-	} else {
-		generateErrorHTML(w, "404")
-	}
+	generatePublicHTML(w, sess, "layout", "header", "index", "footer")
 }
 
 func about(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "about", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "about", "footer")
 }
 
 func blogHome(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "blog-home", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "blog-home", "footer")
 }
 
 func blogPost(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "blog-post", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "blog-post", "footer")
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "contact", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "contact", "footer")
 }
 
 func faq(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "faq", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "faq", "footer")
 }
 
 func portfolioItem(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "portfolio-item", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "portfolio-item", "footer")
 }
 
 func portfolioOverview(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "portfolio-overview", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "portfolio-overview", "footer")
 }
 
 func pricing(w http.ResponseWriter, r *http.Request) {
-	generatePublicHTML(w, nil, "layout", "header", "pricing", "footer")
+	sess, _ := session(w, r)
+	generatePublicHTML(w, sess, "layout", "header", "pricing", "footer")
 }
 
 func todos(w http.ResponseWriter, r *http.Request) {

@@ -15,6 +15,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="/assets/css/styles.css" rel="stylesheet" />
     </head>
@@ -47,11 +48,14 @@
                                 </ul>
                             </li>
                             {{if .Email}}
-                            <li class="nav-item dropdown align-self-center">
-                                <a class="nav-link py-0" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><h5 class="m-0 p-0"><i class="bi bi-person-circle"></i></h5></a>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" class="nav-link dropdown-toggle">
+                                    <!-- <i class="bi bi-person-circle"></i> -->
+                                    <i class="fas fa-user fa-fw"></i>
+                                </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
-                                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    <li><a class="dropdown-item" href="/user/profile" target="_user">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
                                 </ul>
                             </li>
                             {{else}}
