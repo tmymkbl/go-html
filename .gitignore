@@ -1,4 +1,4 @@
 __debug*
 .vscode/
 .history/
-logs/
+logs/*.log
