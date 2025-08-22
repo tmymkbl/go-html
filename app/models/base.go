@@ -32,9 +32,6 @@ func InitDb() {
 	if config.Config.SQLDriver == "sqlite3" {
 		Db, err = sql.Open(config.Config.SQLDriver, config.Config.DbName)
 	} else if config.Config.SQLDriver == "mysql" {
-		// Db, err := sql.Open("mysql", "ユーザー名:パスワード@tcp(ホスト:ポート)/データベース名?parseTime=true&loc=Asia%2FTokyo")
-		// Db, err = sql.Open(config.Config.SQLDriver,
-		// fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Asia/Tokyo",
 		var con string = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 			config.Config.DbUser,
 			config.Config.DbPasswd,
@@ -43,6 +40,7 @@ func InitDb() {
 			config.Config.DbName) + "?charset=utf8mb4&parseTime=True&loc=Asia%2FTokyo"
 		file, line, funcName := utils.GetCurrentInfo()
 		logs.Log.Debug("DB access init ", "con", con, "func", funcName, "file", file, "line", line)
+		// Db, err := sql.Open("mysql", "ユーザー名:パスワード@tcp(ホスト:ポート)/データベース名?charset=utf8mb4&parseTime=true&loc=Asia%2FTokyo")
 		Db, err = sql.Open(config.Config.SQLDriver, con)
 	}
 	if err != nil {
