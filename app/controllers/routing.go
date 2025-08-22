@@ -99,7 +99,7 @@ func SetRoute() {
 	http.Handle("GET /assets/", http.StripPrefix("/assets/", files))
 
 	adminURL := config.Config.AdminURL
-	http.HandleFunc(adminURL, adminTop) //開発途中
+	http.HandleFunc("GET "+adminURL, adminTop) //開発途中
 	http.HandleFunc("GET /about", about)
 	http.HandleFunc("GET /contact", contact)
 	http.HandleFunc("GET /blog-home", blogHome)
@@ -124,18 +124,8 @@ func SetRoute() {
 	http.HandleFunc("/user/todos/delete/", parseURL(todoDelete))
 	http.HandleFunc("GET /user/blog-post", userBlogPost)
 
+	http.HandleFunc("GET /test/slicebyte", testSliceByte) // スライステスト用の実装
+	http.HandleFunc("GET /test/json", testJson)           // jsonテスト用の実装
+
 	http.HandleFunc("/", index) // トップページ及び不明URLの処理
-
-	http.HandleFunc("/test", test) // 軽いテスト用の実装
-}
-
-func test(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "test")
-	a := []byte{0x68, 0x6f, 0x67, 0x65}
-	fmt.Fprintln(w, string(a))
-	b := []byte("foo")
-	fmt.Fprintln(w, b)
-	fmt.Fprintln(w, string(b))
-	c := []string{"foo", "bar", "baz"}
-	fmt.Fprintln(w, c)
 }
