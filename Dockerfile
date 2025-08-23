@@ -1,6 +1,6 @@
-FROM golang:1.24.2-alpine AS go
+FROM golang:1.25-alpine AS go
 
-ENV GOLANG_VERSION=1.24.2
+ENV GOLANG_VERSION=1.25
 ENV GOTOOLCHAIN=local
 ENV GODIR=/opt/go
 ENV GOAPP=$GODIR
