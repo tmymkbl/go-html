@@ -124,8 +124,8 @@ func SetRoute() {
 	http.HandleFunc("/user/todos/delete/", parseURL(todoDelete))
 	http.HandleFunc("GET /user/blog-post", userBlogPost)
 
-	http.HandleFunc("GET /test/slicebyte", testSliceByte) // スライステスト用の実装
-	http.HandleFunc("GET /test/json", testJson)           // jsonテスト用の実装
+	http.HandleFunc("GET /trial/slicebyte", trialSliceByte) // スライステスト用の実装
+	http.HandleFunc("GET /trial/json", trialJson)           // jsonテスト用の実装
 
 	http.HandleFunc("/", index) // トップページ及び不明URLの処理
 }

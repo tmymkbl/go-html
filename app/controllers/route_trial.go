@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func testSliceByte(w http.ResponseWriter, r *http.Request) {
+func trialSliceByte(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "■string: "+"test")
 
 	a := []byte{0x68, 0x6f, 0x67, 0x65}
@@ -22,7 +22,7 @@ func testSliceByte(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, c)
 }
 
-func testJson(w http.ResponseWriter, r *http.Request) {
+func trialJson(w http.ResponseWriter, r *http.Request) {
 	type User struct {
 		ID   int    `json:"id"`
 		Name string `json:"name"`
