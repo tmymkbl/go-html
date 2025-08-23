@@ -98,8 +98,7 @@ func SetRoute() {
 	files := http.FileServer(http.Dir(config.Config.Assets))
 	http.Handle("GET /assets/", http.StripPrefix("/assets/", files))
 
-	adminURL := config.Config.AdminURL
-	http.HandleFunc("GET "+adminURL, adminTop) //開発途中
+	http.HandleFunc("GET "+config.Config.AdminURL, adminTop) //開発途中
 	http.HandleFunc("GET /about", about)
 	http.HandleFunc("GET /contact", contact)
 	http.HandleFunc("GET /blog-home", blogHome)
