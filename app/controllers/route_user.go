@@ -28,9 +28,9 @@ func userProfile(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		// 配列から構造体に変更してみた
 		type Data struct {
-			sess      models.Session
+			Sess      models.Session
 			Dashboard string
-			value     map[string]any
+			Value     map[string]any
 		}
 
 		value_data := map[string]any{
@@ -38,9 +38,9 @@ func userProfile(w http.ResponseWriter, r *http.Request) {
 			"data2": "value2",
 		}
 		data := Data{
-			sess:      sess,
+			Sess:      sess,
 			Dashboard: "ダッシュボード",
-			value:     value_data,
+			Value:     value_data,
 		}
 		generateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
 	} else {
