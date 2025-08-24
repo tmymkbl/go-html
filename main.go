@@ -42,17 +42,19 @@ func main() {
 	logs.Log.Debug("start ", "file", file, "line", line, "funcName", funcName)
 
 	models.InitDb()
-	controllers.SetRoute()
+	mux := controllers.SetRoute()
 
 	logs.Log.Info("start Server ", "port", config.Config.Port)
 
+	csrfP := http.NewCrossOriginProtection()
+
 	if config.Config.ServerMode == "cgi" {
-		err := cgi.Serve(nil)
+		err := cgi.Serve(csrfP.Handler(mux))
 		if err != nil {
 			fmt.Println("Error starting server:", err)
 		}
 	} else {
-		err := http.ListenAndServe(":"+config.Config.Port, nil)
+		err := http.ListenAndServe(":"+config.Config.Port, csrfP.Handler(mux))
 		if err != nil {
 			fmt.Println("Error starting server:", err)
 		}
