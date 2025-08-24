@@ -7,6 +7,7 @@ import (
 
 	"go-sample-todo/app/logs"
 	"go-sample-todo/app/models"
+	"go-sample-todo/app/views"
 	"go-sample-todo/utils"
 
 	en "github.com/go-playground/locales/en"
@@ -87,7 +88,7 @@ func validateSignupAuth(r *http.Request) (map[string]any, bool) {
 func signupAuth(w http.ResponseWriter, r *http.Request) {
 	retList, ok := validateSignupAuth(r)
 	if !ok {
-		generateAuthHTML(w, retList, "layout", "signup")
+		views.GenerateAuthHTML(w, retList, "layout", "signup")
 		return
 	}
 	user, err := models.GetUserByEmail(r.PostFormValue("email"))
@@ -98,7 +99,7 @@ func signupAuth(w http.ResponseWriter, r *http.Request) {
 		file, line, funcName := utils.GetCurrentInfo()
 		logs.Log.Info("signup Error ", "email", r.PostFormValue("email"), "message", err, "file", file, "func", funcName, "line", line)
 		retList["error"] = authErrList
-		generateAuthHTML(w, retList, "layout", "signup")
+		views.GenerateAuthHTML(w, retList, "layout", "signup")
 		return
 	}
 	if user.PassWord == models.Encrypt(r.PostFormValue("password")) {
@@ -114,7 +115,7 @@ func signupAuth(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
-		generateAuthHTML(w, retList, "layout", "signup")
+		views.GenerateAuthHTML(w, retList, "layout", "signup")
 		return
 	}
 }
@@ -122,7 +123,7 @@ func signupAuth(w http.ResponseWriter, r *http.Request) {
 func signup(w http.ResponseWriter, r *http.Request) {
 	_, err := session(w, r)
 	if err != nil {
-		generateAuthHTML(w, nil, "layout", "signup")
+		views.GenerateAuthHTML(w, nil, "layout", "signup")
 	} else {
 		http.Redirect(w, r, "/", http.StatusFound)
 	}
@@ -176,7 +177,7 @@ func validateLoginAuth(r *http.Request) (map[string]any, bool) {
 func loginAuth(w http.ResponseWriter, r *http.Request) {
 	retList, ok := validateLoginAuth(r)
 	if !ok {
-		generateAuthHTML(w, retList, "layout", "login")
+		views.GenerateAuthHTML(w, retList, "layout", "login")
 		return
 	}
 	user, err := models.GetUserByEmail(r.PostFormValue("email"))
@@ -187,7 +188,7 @@ func loginAuth(w http.ResponseWriter, r *http.Request) {
 		file, line, funcName := utils.GetCurrentInfo()
 		logs.Log.Info("login Error ", "email", r.PostFormValue("email"), "message", err, "file", file, "func", funcName, "line", line)
 		retList["error"] = authErrList
-		generateAuthHTML(w, retList, "layout", "login")
+		views.GenerateAuthHTML(w, retList, "layout", "login")
 		return
 	}
 	if user.PassWord == models.Encrypt(r.PostFormValue("password")) {
@@ -203,7 +204,7 @@ func loginAuth(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
-		generateAuthHTML(w, retList, "layout", "login")
+		views.GenerateAuthHTML(w, retList, "layout", "login")
 		return
 	}
 }
@@ -211,7 +212,7 @@ func loginAuth(w http.ResponseWriter, r *http.Request) {
 func login(w http.ResponseWriter, r *http.Request) {
 	_, err := session(w, r)
 	if err != nil {
-		generateAuthHTML(w, nil, "layout", "login")
+		views.GenerateAuthHTML(w, nil, "layout", "login")
 	} else {
 		http.Redirect(w, r, "/", http.StatusFound)
 	}
@@ -220,7 +221,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 func forgotPassword(w http.ResponseWriter, r *http.Request) {
 	_, err := session(w, r)
 	if err != nil {
-		generateAuthHTML(w, nil, "layout", "password")
+		views.GenerateAuthHTML(w, nil, "layout", "password")
 	} else {
 		http.Redirect(w, r, "/", http.StatusFound)
 	}

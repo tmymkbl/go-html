@@ -1,11 +1,9 @@
 package controllers
 
 import (
-	"fmt"
 	"go-sample-todo/app/models"
-	"html/template"
+	"go-sample-todo/app/views"
 	"net/http"
-	"os"
 )
 
 func userBlogPost(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +18,7 @@ func userBlogPost(w http.ResponseWriter, r *http.Request) {
 			"data1": "value1",
 			"data2": "value2",
 		}
-		generateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "blog-post", "footer", "scripts")
+		views.GenerateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "blog-post", "footer", "scripts")
 	} else {
 		http.Redirect(w, r, "/", 200)
 	}
@@ -57,10 +55,10 @@ func userProfile(w http.ResponseWriter, r *http.Request) {
 			Value2:    data2,
 		}
 		// テンプレートでの取り出し確認
-		tmpl := "Dashboard: {{.Dashboard}}, Value.data1: {{.Value.data1}}, Value2.Value: {{.Value2.Value}}"
-		t, _ := template.New("test").Parse(tmpl)
-		fmt.Println(t.Execute(os.Stdout, data))
-		generateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
+		// tmpl := "Dashboard: {{.Dashboard}}, Value.data1: {{.Value.data1}}, Value2.Value: {{.Value2.Value}}"
+		// t, _ := template.New("test").Parse(tmpl)
+		// fmt.Println(t.Execute(os.Stdout, data))
+		views.GenerateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
 	} else {
 		http.Redirect(w, r, "/", 200)
 	}
