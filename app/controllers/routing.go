@@ -38,50 +38,37 @@ func parseURL(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc
 	}
 }
 
-func SetRoute() {
-	// files := http.FileServer(http.Dir(config.Config.Static))
-	// http.Handle("/static/", http.StripPrefix("/static/", files))
+func SetRoute() http.Handler {
+	mux := http.NewServeMux()
+
 	files := http.FileServer(http.Dir(config.Config.Assets))
-	http.Handle("GET /assets/", http.StripPrefix("/assets/", files))
+	mux.Handle("GET /assets/", http.StripPrefix("/assets/", files))
+	mux.HandleFunc("GET "+config.Config.AdminURL, adminTop) //開発途中
+	mux.HandleFunc("GET /about", about)
+	mux.HandleFunc("GET /contact", contact)
+	mux.HandleFunc("GET /blog-home", blogHome)
+	mux.HandleFunc("GET /blog-post", blogPost)
+	mux.HandleFunc("GET /faq", faq)
+	mux.HandleFunc("GET /portfolio-item", portfolioItem)
+	mux.HandleFunc("GET /portfolio-overview", portfolioOverview)
+	mux.HandleFunc("GET /pricing", pricing)
+	mux.HandleFunc("GET /signup", signup)
+	mux.HandleFunc("POST /signup", signupAuth)
+	mux.HandleFunc("GET /login", login)
+	mux.HandleFunc("POST /login", loginAuth)
+	mux.HandleFunc("GET /forgot_password", forgotPassword)
 
-	adminURL := config.Config.AdminURL
-	http.HandleFunc(adminURL, adminTop) //開発途中
-	http.HandleFunc("GET /about", about)
-	http.HandleFunc("GET /contact", contact)
-	http.HandleFunc("GET /blog-home", blogHome)
-	http.HandleFunc("GET /blog-post", blogPost)
-	http.HandleFunc("GET /faq", faq)
-	http.HandleFunc("GET /portfolio-item", portfolioItem)
-	http.HandleFunc("GET /portfolio-overview", portfolioOverview)
-	http.HandleFunc("GET /pricing", pricing)
-	http.HandleFunc("GET /signup", signup)
-	http.HandleFunc("POST /signup", signupAuth)
-	http.HandleFunc("GET /login", login)
-	http.HandleFunc("POST /login", loginAuth)
-	http.HandleFunc("GET /forgot_password", forgotPassword)
+	mux.HandleFunc("/user/logout", logout)
+	mux.HandleFunc("GET /user/profile", userProfile)
+	mux.HandleFunc("GET /user/todos", todos)
+	mux.HandleFunc("/user/todos/new", todoNew)
+	mux.HandleFunc("/user/todos/save", todoSave)
+	mux.HandleFunc("/user/todos/edit/", parseURL(todoEdit))
+	mux.HandleFunc("/user/todos/update/", parseURL(todoUpdate))
+	mux.HandleFunc("/user/todos/delete/", parseURL(todoDelete))
+	mux.HandleFunc("GET /user/blog-post", userBlogPost)
 
-	http.HandleFunc("/user/logout", logout)
-	http.HandleFunc("GET /user/profile", userProfile)
-	http.HandleFunc("GET /user/todos", todos)
-	http.HandleFunc("/user/todos/new", todoNew)
-	http.HandleFunc("/user/todos/save", todoSave)
-	http.HandleFunc("/user/todos/edit/", parseURL(todoEdit))
-	http.HandleFunc("/user/todos/update/", parseURL(todoUpdate))
-	http.HandleFunc("/user/todos/delete/", parseURL(todoDelete))
-	http.HandleFunc("GET /user/blog-post", userBlogPost)
+	mux.HandleFunc("/", index) // トップページ及び不明URLの処理
 
-	http.HandleFunc("/", index) // トップページ及び不明URLの処理
-
-	http.HandleFunc("/test", test) // 軽いテスト用の実装
-}
-
-func test(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "test")
-	a := []byte{0x68, 0x6f, 0x67, 0x65}
-	fmt.Fprintln(w, string(a))
-	b := []byte("foo")
-	fmt.Fprintln(w, b)
-	fmt.Fprintln(w, string(b))
-	c := []string{"foo", "bar", "baz"}
-	fmt.Fprintln(w, c)
+	return mux
 }

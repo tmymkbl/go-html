@@ -8,6 +8,7 @@ import (
 	"go-sample-todo/app/logs"
 	"go-sample-todo/app/models"
 	"go-sample-todo/app/views"
+	"go-sample-todo/config"
 	"go-sample-todo/utils"
 
 	en "github.com/go-playground/locales/en"
@@ -108,9 +109,24 @@ func signupAuth(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 		cookie := http.Cookie{
-			Name:     "_cookie",
-			Value:    session.UUID,
-			HttpOnly: true,
+			Name:  "_cookie",
+			Value: session.UUID,
+			SameSite: func() http.SameSite {
+				switch strings.ToLower(config.Config.CookieSame) {
+				case "lax":
+					return http.SameSiteLaxMode
+				case "strict":
+					return http.SameSiteStrictMode
+				case "none":
+					return http.SameSiteNoneMode
+				default:
+					return http.SameSiteDefaultMode
+				}
+			}(),
+			HttpOnly: config.Config.CookieHttps,
+			Secure:   config.Config.CookieSecure, // 本番環境では true にすることを推奨
+			// Expires:  session.CreatedAt.Add(time.Duration(config.Config.CookieExpire) * time.Hour),
+			// Expires: session.CreatedAt.Add(8 * time.Hour),
 		}
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/", http.StatusFound)
@@ -197,9 +213,24 @@ func loginAuth(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 		cookie := http.Cookie{
-			Name:     "_cookie",
-			Value:    session.UUID,
-			HttpOnly: true,
+			Name:  "_cookie",
+			Value: session.UUID,
+			SameSite: func() http.SameSite {
+				switch strings.ToLower(config.Config.CookieSame) {
+				case "lax":
+					return http.SameSiteLaxMode
+				case "strict":
+					return http.SameSiteStrictMode
+				case "none":
+					return http.SameSiteNoneMode
+				default:
+					return http.SameSiteDefaultMode
+				}
+			}(),
+			HttpOnly: config.Config.CookieHttps,
+			Secure:   config.Config.CookieSecure, // 本番環境では true にすることを推奨
+			// Expires:  session.CreatedAt.Add(time.Duration(config.Config.CookieExpire) * time.Hour),
+			// Expires: session.CreatedAt.Add(8 * time.Hour),
 		}
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/", http.StatusFound)
