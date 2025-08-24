@@ -3,7 +3,6 @@ package controllers
 import (
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -11,59 +10,6 @@ import (
 	"go-sample-todo/app/models"
 	"go-sample-todo/config"
 )
-
-func generatePublicHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
-	var files []string
-	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/public/%s.html", file))
-	}
-
-	templates := template.Must(template.ParseFiles(files...))
-	templates.ExecuteTemplate(w, "layout", data)
-}
-
-func generateErrorHTML(writer http.ResponseWriter, filenames ...string) {
-	var files []string
-	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/%s.html", file))
-	}
-	templates := template.Must(template.ParseFiles(files...))
-	templates.ExecuteTemplate(writer, "content", nil)
-}
-
-func generateAuthHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
-	var files []string
-	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/auth/%s.html", file))
-	}
-
-	templates := template.Must(template.ParseFiles(files...))
-	// if data == nil {
-	// 	templates.Execute(writer, "layout")
-	// } else {
-	templates.ExecuteTemplate(writer, "layout", data)
-	// }
-}
-
-func generateUserHTML(w http.ResponseWriter, data any, filenames ...string) {
-	var files []string
-	for _, file := range filenames {
-		fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
-	}
-	templates := template.Must(template.ParseFiles(files...))
-	templates.ExecuteTemplate(w, "user_layout", data)
-}
-
-func generateAdminHTML(writer http.ResponseWriter, data any, filenames ...string) {
-	var files []string
-	for _, file := range filenames {
-		fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/admin/%s.html", file))
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/admin/%s.html", file))
-	}
-	templates := template.Must(template.ParseFiles(files...))
-	templates.ExecuteTemplate(writer, "admin_layout", data)
-}
 
 // func session(writer http.ResponseWriter, request *http.Request) (sess models.Session, err error) {
 func session(_ http.ResponseWriter, request *http.Request) (sess models.Session, err error) {

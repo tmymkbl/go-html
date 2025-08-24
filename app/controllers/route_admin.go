@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"go-sample-todo/app/views"
 	"net/http"
 )
 
@@ -16,7 +17,7 @@ func adminTop(w http.ResponseWriter, r *http.Request) {
 		"data2": "value2",
 	}
 	if err != nil {
-		generateAdminHTML(w, data, "admin_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
+		views.GenerateAdminHTML(w, data, "admin_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
 	} else {
 		http.Redirect(w, r, "/", http.StatusFound)
 	}

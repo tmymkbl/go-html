@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"go-sample-todo/app/models"
+	"go-sample-todo/app/views"
 	"net/http"
 )
 
@@ -17,7 +18,7 @@ func userBlogPost(w http.ResponseWriter, r *http.Request) {
 			"data1": "value1",
 			"data2": "value2",
 		}
-		generateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "blog-post", "footer", "scripts")
+		views.GenerateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "blog-post", "footer", "scripts")
 	} else {
 		http.Redirect(w, r, "/", 200)
 	}
@@ -42,7 +43,7 @@ func userProfile(w http.ResponseWriter, r *http.Request) {
 			Dashboard: "ダッシュボード",
 			Value:     value_data,
 		}
-		generateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
+		views.GenerateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "main", "footer", "scripts")
 	} else {
 		http.Redirect(w, r, "/", 200)
 	}

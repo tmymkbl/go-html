@@ -6,51 +6,52 @@ import (
 	"net/http"
 
 	"go-sample-todo/app/models"
+	"go-sample-todo/app/views"
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "index", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "index", "footer")
 }
 
 func about(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "about", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "about", "footer")
 }
 
 func blogHome(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "blog-home", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "blog-home", "footer")
 }
 
 func blogPost(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "blog-post", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "blog-post", "footer")
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "contact", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "contact", "footer")
 }
 
 func faq(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "faq", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "faq", "footer")
 }
 
 func portfolioItem(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "portfolio-item", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "portfolio-item", "footer")
 }
 
 func portfolioOverview(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "portfolio-overview", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "portfolio-overview", "footer")
 }
 
 func pricing(w http.ResponseWriter, r *http.Request) {
 	sess, _ := session(w, r)
-	generatePublicHTML(w, sess, "layout", "header", "pricing", "footer")
+	views.GeneratePublicHTML(w, sess, "layout", "header", "pricing", "footer")
 }
 
 func todos(w http.ResponseWriter, r *http.Request) {
@@ -64,7 +65,7 @@ func todos(w http.ResponseWriter, r *http.Request) {
 		}
 		todos, _ := user.GetTodosByUser()
 		user.Todos = todos
-		generatePublicHTML(w, user, "layout", "private_navbar", "todo")
+		views.GeneratePublicHTML(w, user, "layout", "private_navbar", "todo")
 	}
 }
 
@@ -73,7 +74,7 @@ func todoNew(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
-		generatePublicHTML(w, nil, "layout", "private_navbar", "todo_new")
+		views.GeneratePublicHTML(w, nil, "layout", "private_navbar", "todo_new")
 	}
 }
 
@@ -119,7 +120,7 @@ func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
 			log.Fatalln(err)
 		}
 		fmt.Println(t)
-		generatePublicHTML(w, t, "layout", "private_navbar", "todo_edit")
+		views.GeneratePublicHTML(w, t, "layout", "private_navbar", "todo_edit")
 	}
 }
 
