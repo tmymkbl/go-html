@@ -1,12 +1,13 @@
 package controllers
 
 import (
+	"go-sample-todo/app/models"
 	"go-sample-todo/app/views"
 	"net/http"
 )
 
 func adminTop(w http.ResponseWriter, r *http.Request) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	data := map[string]any{
 		"sess":      sess,
 		"Dashboard": "ダッシュボード",

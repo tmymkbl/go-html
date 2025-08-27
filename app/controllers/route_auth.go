@@ -137,7 +137,7 @@ func signupAuth(w http.ResponseWriter, r *http.Request) {
 }
 
 func signup(w http.ResponseWriter, r *http.Request) {
-	_, err := session(w, r)
+	_, err := models.GetSession(w, r)
 	if err != nil {
 		views.GenerateAuthHTML(w, nil, "layout", "signup")
 	} else {
@@ -241,7 +241,7 @@ func loginAuth(w http.ResponseWriter, r *http.Request) {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	_, err := session(w, r)
+	_, err := models.GetSession(w, r)
 	if err != nil {
 		views.GenerateAuthHTML(w, nil, "layout", "login")
 	} else {
@@ -250,7 +250,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 func forgotPassword(w http.ResponseWriter, r *http.Request) {
-	_, err := session(w, r)
+	_, err := models.GetSession(w, r)
 	if err != nil {
 		views.GenerateAuthHTML(w, nil, "layout", "password")
 	} else {

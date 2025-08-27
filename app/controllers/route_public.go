@@ -10,52 +10,52 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "index", "footer")
 }
 
 func about(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "about", "footer")
 }
 
 func blogHome(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "blog-home", "footer")
 }
 
 func blogPost(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "blog-post", "footer")
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "contact", "footer")
 }
 
 func faq(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "faq", "footer")
 }
 
 func portfolioItem(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "portfolio-item", "footer")
 }
 
 func portfolioOverview(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "portfolio-overview", "footer")
 }
 
 func pricing(w http.ResponseWriter, r *http.Request) {
-	sess, _ := session(w, r)
+	sess, _ := models.GetSession(w, r)
 	views.GeneratePublicHTML(w, sess, "layout", "header", "pricing", "footer")
 }
 
 func todos(w http.ResponseWriter, r *http.Request) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
@@ -70,7 +70,7 @@ func todos(w http.ResponseWriter, r *http.Request) {
 }
 
 func todoNew(w http.ResponseWriter, r *http.Request) {
-	_, err := session(w, r)
+	_, err := models.GetSession(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
@@ -79,7 +79,7 @@ func todoNew(w http.ResponseWriter, r *http.Request) {
 }
 
 func todoSave(w http.ResponseWriter, r *http.Request) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
@@ -102,7 +102,7 @@ func todoSave(w http.ResponseWriter, r *http.Request) {
 }
 
 func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
@@ -125,7 +125,7 @@ func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
 }
 
 func todoUpdate(w http.ResponseWriter, r *http.Request, id int) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
@@ -147,7 +147,7 @@ func todoUpdate(w http.ResponseWriter, r *http.Request, id int) {
 }
 
 func todoDelete(w http.ResponseWriter, r *http.Request, id int) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {

@@ -7,7 +7,7 @@ import (
 )
 
 func userBlogPost(w http.ResponseWriter, r *http.Request) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	if err != nil {
 		data := map[string]any{
 			"sess":      sess,
@@ -25,7 +25,7 @@ func userBlogPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func userProfile(w http.ResponseWriter, r *http.Request) {
-	sess, err := session(w, r)
+	sess, err := models.GetSession(w, r)
 	if err == nil {
 		// 配列から構造体に変更してみた
 		type Data struct {
