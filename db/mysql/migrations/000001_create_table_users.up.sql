@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users`(
+    `id` INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `uuid` VARCHAR(255) NOT NULL UNIQUE,
+    `name` VARCHAR(255),
+    `email` VARCHAR(255),
+    `password` VARCHAR(255),
+    `created_at` TIMESTAMP);

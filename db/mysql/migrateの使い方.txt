@@ -1,0 +1,29 @@
+マイグレーションの使い方
+
+マイグレーションファイルを格納するディレクトリにひな形を作成する。
+
+/opt/go # migrate create -dir db/mysql/migrations -seq -ext sql -tz Asia/Tokyo create_table_user 
+/opt/go/db/mysql/migrations/000001_create_table_user.up.sql
+/opt/go/db/mysql/migrations/000001_create_table_user.down.sql
+
+*.up.sql は CREATE TABLE とか ALTER とかテーブルを操作するSQLを書く。
+
+*.down.sql は DROP TABLE とか ALTER とかテーブルを元に戻す操作のSQLを書く。
+
+マイグレーションの実行
+up （何らかの更新）を行う
+/opt/go # migrate -path db/mysql/migrations -database 'mysql://golang:golang@tcp(db:3306)/golang?query' up
+1/u create_table_users (204.098842ms)
+
+down （原状復帰）を行う。
+/opt/go # migrate -path db/mysql/migrations -database 'mysql://golang:golang@tcp(db:3306)/golang?query' down
+Are you sure you want to apply all down migrations? [y/N]
+y          ←入力する
+Applying all down migrations
+1/d create_table_users (190.948465ms)
+
+※余談だがmigrateのインストールは以下のコマンドで行った。
+---------------------------------------------------
+/opt/go # go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+---------------------------------------------------
+

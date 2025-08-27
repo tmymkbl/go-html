@@ -19,13 +19,13 @@ type Session struct {
 // func session(writer http.ResponseWriter, request *http.Request) (sess models.Session, err error) {
 func GetSession(_ http.ResponseWriter, request *http.Request) (sess Session, err error) {
 	cookie, err := request.Cookie("_cookie")
-	if err == nil {
+	if cookie != nil {
 		sess = Session{UUID: cookie.Value}
 		if ok, _ := sess.CheckSession(); !ok {
 			err = errors.New("invalid session")
 		}
 	}
-	return
+	return sess, err
 }
 
 func (u *User) CreateSession() (session Session, err error) {

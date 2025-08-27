@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS `todos`;
+CREATE TABLE IF NOT EXISTS `todos`(
+    `id` INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `content` TEXT,
+    `user_id` INTEGER UNSIGNED ,
+    `created_at` TIMESTAMP)
