@@ -1,0 +1,43 @@
+{{define "content"}}
+<div class="container-fluid px-4">
+  <h1 class="mt-4">TODOの追加</h1>
+  <form role="form" action="/user/todos/save" method="post">
+    <div class="mx-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/user/todos">TODOs</a></li>
+        <li class="breadcrumb-item active">New</li>
+      </ol>
+      <div class="form-group">
+        <div class="mb-3">
+          <label for="TitleInput" class="form-label">タイトル</label>
+          <input name="title" type="text" class="form-control" id="TitleInput" placeholder="タイトルを入力">
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">TODO本文</label>
+          <textarea class="form-control" name="content" id="content" placeholder="TODOを追加" rows="4"></textarea>
+          <script>
+            $('#content').summernote({
+              placeholder: 'TODOを追加',
+              lang: 'ja-JP',
+              tabsize: 2,
+              height: 360,
+              toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+              ]
+            });
+          </script>
+        </div>
+        <div class="d-grid">
+          <button class="btn btn-primary d-grid gap-2 col-6 mx-auto my-3" type="submit">作成</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>  
+{{end}}

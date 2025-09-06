@@ -5,4 +5,6 @@ CREATE TABLE IF NOT EXISTS `sessions`(
     `name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `user_id` INTEGER UNSIGNED,
-    `created_at` TIMESTAMP)
+    `created_at` TIMESTAMP,
+    `updated_at` TIMESTAMP,
+    `deleted_at` TIMESTAMP);

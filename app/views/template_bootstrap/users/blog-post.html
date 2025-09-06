@@ -4,53 +4,170 @@
     <section class="py-5">
         <div class="container px-5">
             <!-- Contact form-->
-            <form class="was-validated">
-                <div class="mb-3">
-                    <label for="validationTextarea" class="form-label">Textarea</label>
-                    <textarea class="form-control" id="validationTextarea" placeholder="Required example textarea"
-                        required></textarea>
-                    <div class="invalid-feedback">
-                        Please enter a message in the textarea.
+            <div class="row">
+                <!-- <a class="btn btn-primary" href="/users/blog-posts">一覧に戻る</a> -->
+                <form class="was-validated" type="submit" action="/user/blog-post" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">タイトル画像 (700x350px)</label>
+                        <input name="titleimg" type="file" class="form-control" aria-label="file example" required>
+                        <div class="invalid-feedback">タイトル画像をセットしてください</div>
                     </div>
-                </div>
 
-                <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="validationFormCheck1" required>
-                    <label class="form-check-label" for="validationFormCheck1">Check this checkbox</label>
-                    <div class="invalid-feedback">Example invalid feedback text</div>
-                </div>
+                    <label class="form-label">公開/非公開区分</label>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio-stacked"
+                            required>
+                        <label class="form-check-label" for="validationFormCheck2">公開</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked"
+                            required>
+                        <label class="form-check-label" for="validationFormCheck3">非公開</label>
+                        <div class="invalid-feedback">公開か非公開かは必ず選択して下さい</div>
+                    </div>
 
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio-stacked"
-                        required>
-                    <label class="form-check-label" for="validationFormCheck2">Toggle this radio</label>
-                </div>
-                <div class="form-check mb-3">
-                    <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked"
-                        required>
-                    <label class="form-check-label" for="validationFormCheck3">Or toggle this other radio</label>
-                    <div class="invalid-feedback">More example invalid feedback text</div>
-                </div>
+                    <div class="mb-3">
+                        <label for="validationTextarea" class="form-label">本文 マークダウン(md)形式</label>
+                        <textarea class="form-control" id="validationTextarea" placeholder="Required example textarea"
+                            rows="10" required></textarea>
+                        <div class="invalid-feedback">
+                            Please enter a message in the textarea.
+                        </div>
+                    </div>
+                    <label for="formFile" class="form-label">本文内画像 (700x350px)<small style="color: gray">※大きい画像は横幅を基準に縮小されます</small></label>
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-auto">
+                                <label for="inputPassword6" class="col-form-label">画像1</label>
+                            </div>
 
-                <div class="mb-3">
-                    <select class="form-select" required aria-label="select example">
-                        <option value="">Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
-                    <div class="invalid-feedback">Example invalid select feedback</div>
-                </div>
+                            <div class="col-auto">
+                                <input type="file" class="form-control col-sm-2 col-form-label col-form-label-sm"
+                                    aria-label="file example">
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select col" aria-label="select example">
+                                    <option value="">形式</option>
+                                    <option value="1">jpg</option>
+                                    <option value="2">png</option>
+                                    <option value="3">gif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <label for="inputPassword6" class="col-form-label">画像2</label>
+                            </div>
 
-                <div class="mb-3">
-                    <input type="file" class="form-control" aria-label="file example" required>
-                    <div class="invalid-feedback">Example invalid form file feedback</div>
-                </div>
+                            <div class="col-auto">
+                                <input type="file" class="form-control col-sm-2 col-form-label col-form-label-sm"
+                                    aria-label="file example">
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select col" aria-label="select example">
+                                    <option value="">形式</option>
+                                    <option value="1">jpg</option>
+                                    <option value="2">png</option>
+                                    <option value="3">gif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <label for="inputPassword6" class="col-form-label">画像3</label>
+                            </div>
 
-                <div class="mb-3">
-                    <button class="btn btn-primary" type="submit" disabled>Submit form</button>
-                </div>
-            </form>
+                            <div class="col-auto">
+                                <input name="img_1" type="file" class="form-control col-sm-2 col-form-label col-form-label-sm"
+                                    aria-label="file example">
+                            </div>
+                            <div class="col-auto">
+                                <select name="ext_1" class="form-select col" aria-label="select example">
+                                    <option value="">形式</option>
+                                    <option value="1">jpg</option>
+                                    <option value="2">png</option>
+                                    <option value="3">gif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-auto">
+                                <label for="inputPassword6" class="col-form-label">画像4</label>
+                            </div>
+
+                            <div class="col-auto">
+                                <input type="file" class="form-control col-sm-2 col-form-label col-form-label-sm"
+                                    aria-label="file example">
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select col" aria-label="select example">
+                                    <option value="">形式</option>
+                                    <option value="1">jpg</option>
+                                    <option value="2">png</option>
+                                    <option value="3">gif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-auto">
+                                <label for="inputPassword6" class="col-form-label">画像5</label>
+                            </div>
+
+                            <div class="col-auto">
+                                <input type="file" class="form-control col-sm-2 col-form-label col-form-label-sm"
+                                    aria-label="file example">
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select col" aria-label="select example">
+                                    <option value="">形式</option>
+                                    <option value="1">jpg</option>
+                                    <option value="2">png</option>
+                                    <option value="3">gif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="validationFormCheck1" required>
+                        <label class="form-check-label" for="validationFormCheck1">Check this checkbox</label>
+                        <div class="invalid-feedback">Example invalid feedback text</div>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio-stacked"
+                            required>
+                        <label class="form-check-label" for="validationFormCheck2">Toggle this radio</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked"
+                            required>
+                        <label class="form-check-label" for="validationFormCheck3">Or toggle this other radio</label>
+                        <div class="invalid-feedback">More example invalid feedback text</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <select class="form-select" required aria-label="select example">
+                            <option value="">Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        <div class="invalid-feedback">Example invalid select feedback</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="file" class="form-control" aria-label="file example" required>
+                        <div class="invalid-feedback">Example invalid form file feedback</div>
+                    </div>
+-->
+                    <div class="mb-3">
+                        <input class="btn btn-primary" type="submit">Submit form</input>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
 </div>

@@ -19,7 +19,7 @@ type Session struct {
 // func session(writer http.ResponseWriter, request *http.Request) (sess models.Session, err error) {
 func GetSession(_ http.ResponseWriter, request *http.Request) (sess Session, err error) {
 	cookie, err := request.Cookie("_cookie")
-	if cookie != nil {
+	if err == nil {
 		sess = Session{UUID: cookie.Value}
 		if ok, _ := sess.CheckSession(); !ok {
 			err = errors.New("invalid session")
@@ -45,6 +45,9 @@ func (u *User) CreateSession() (session Session, err error) {
 	cmd2 := `select id, uuid, name, email, user_id, created_at
 	 from sessions where user_id = ? and email = ?`
 
+	// Scan（）はクエリを実行して
+	// 該当レコードがあればtrueを返し
+	// １行分だけの値を与えられた項目に格納する。
 	err = Db.QueryRow(cmd2, u.ID, u.Email).Scan(
 		&session.ID,
 		&session.UUID,

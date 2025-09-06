@@ -1,0 +1,44 @@
+{{define "content"}}
+<div class="container-fluid px-4">
+  <h1 class="mt-4">TODOsの修正</h1>
+  <form role="form" action="/user/todos/update/{{.Todos.ID}}" method="post">
+    <input type="hidden" value="{{.Todos.ID}}" name="todo_id">
+    <div class="mx-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/user/todos">TODOs</a></li>
+        <li class="breadcrumb-item active">Edit</li>
+      </ol>
+      <div class="form-group">
+        <div class="mb-3">
+          <label for="TitleInput" class="form-label">タイトル</label>
+          <input name="title" type="text" class="form-control" id="TitleInput" value="{{.Todos.Title}}">
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">TODO本文</label>
+          <textarea class="form-control" name="content" id="content" placeholder="Todoを更新"
+            rows="4">{{.Todos.Content}}</textarea>
+          <script>
+            $('#content').summernote({
+              lang: 'ja-JP',
+              tabsize: 2,
+              height: 360,
+              toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+              ]
+            });
+          </script>
+        </div>
+        <div class="d-grid">
+          <button class="btn btn-success d-grid gap-2 col-6 mx-auto my-3" type="submit">更新</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{{end}}

@@ -37,7 +37,10 @@
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
                                     <li><a class="dropdown-item" href="/blog-home">Blog Home</a></li>
+                                    {{if .Email}}
                                     <li><a class="dropdown-item" href="/blog-post">Blog Post</a></li>
+                                    <li><a class="dropdown-item" href="/blog-post">Blog Post</a></li>
+                                    {{end}}
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -54,7 +57,7 @@
                                     <i class="fas fa-user fa-fw"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                    <li><a class="dropdown-item" href="/user/profile" target="_user">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/user" target="_user">Dashboard</a></li>
                                     <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
                                 </ul>
                             </li>

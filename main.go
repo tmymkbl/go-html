@@ -41,7 +41,13 @@ func main() {
 	file, line, funcName := utils.GetCurrentInfo()
 	logs.Log.Debug("start ", "file", file, "line", line, "funcName", funcName)
 
-	models.InitDb()
+	err := models.ConnectDB()
+	if err != nil {
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
+		os.Exit(-1)
+	}
+
 	mux := controllers.SetRoute()
 
 	logs.Log.Info("start Server ", "port", config.Config.Port)

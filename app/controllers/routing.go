@@ -3,23 +3,25 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strconv"
 
 	"go-sample-todo/config"
 )
 
-var validPath = regexp.MustCompile("^/todos/(edit|save|update|delete)/([0-9]+)$")
+var todoPath = regexp.MustCompile("^/user/todos/(edit|save|update|complete|delete)/([0-9]+)$")
 
-func parseURL(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc {
+func parseURL(reg regexp.Regexp, fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		q := validPath.FindStringSubmatch(r.URL.Path)
+		myUrl, _ := url.Parse(r.URL.String())
+		fmt.Println(myUrl)
+		q := reg.FindAllStringSubmatch(r.URL.Path, -1)
 		if q == nil {
 			http.NotFound(w, r)
 			return
 		}
-		id, _ := strconv.Atoi(q[2])
-		fmt.Println(id)
+		id, _ := strconv.Atoi(q[0][2])
 		fn(w, r, id)
 	}
 }
@@ -45,14 +47,17 @@ func SetRoute() http.Handler {
 	mux.HandleFunc("GET /forgot_password", forgotPassword)
 
 	mux.HandleFunc("/user/logout", logout)
+	mux.HandleFunc("GET /user", userDashboard)
 	mux.HandleFunc("GET /user/profile", userProfile)
 	mux.HandleFunc("GET /user/todos", todos)
-	mux.HandleFunc("/user/todos/new", todoNew)
-	mux.HandleFunc("/user/todos/save", todoSave)
-	mux.HandleFunc("/user/todos/edit/", parseURL(todoEdit))
-	mux.HandleFunc("/user/todos/update/", parseURL(todoUpdate))
-	mux.HandleFunc("/user/todos/delete/", parseURL(todoDelete))
+	mux.HandleFunc("GET /user/todos/new", todoNew)
+	mux.HandleFunc("POST /user/todos/save", todoSave)
+	mux.HandleFunc("GET /user/todos/edit/", parseURL(*todoPath, todoEdit))
+	mux.HandleFunc("POST /user/todos/update/", parseURL(*todoPath, todoUpdate))
+	mux.HandleFunc("GET /user/todos/complete/", parseURL(*todoPath, todoComplete))
+	mux.HandleFunc("GET /user/todos/delete/", parseURL(*todoPath, todoDelete))
 	mux.HandleFunc("GET /user/blog-post", userBlogPost)
+	mux.HandleFunc("POST /user/blog-post", userBlogPostEntry)
 
 	mux.HandleFunc("/", index) // トップページ及び不明URLの処理
 

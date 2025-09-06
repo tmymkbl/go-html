@@ -1,6 +1,6 @@
 マイグレーションの使い方
 
-マイグレーションファイルを格納するディレクトリにひな形を作成する。
+格納するディレクトリ、タイムゾーン、拡張子、ファイルの名前などを指定してひな形ファイルを作成する。
 
 /opt/go # migrate create -dir db/mysql/migrations -seq -ext sql -tz Asia/Tokyo create_table_user 
 /opt/go/db/mysql/migrations/000001_create_table_user.up.sql
@@ -25,5 +25,14 @@ Applying all down migrations
 ※余談だがmigrateのインストールは以下のコマンドで行った。
 ---------------------------------------------------
 /opt/go # go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+---------------------------------------------------
+
+※さらに余談だがgolangデータベースは事前に作っておかなければならない
+---------------------------------------------------
+$ docker exec -i -t go-sample-todo-db-1 /bin/sh
+sh-4.4# mysql -u root -p
+Enter password:
+
+mysql> create database golang charactor set utf8mb4;
 ---------------------------------------------------
 

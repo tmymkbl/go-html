@@ -1,0 +1,47 @@
+{{ define "content" }}
+<div class="container-fluid px-4">
+  <h1 class="mt-4">TODOs</h1>
+  <div class="mx-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active">TODOs</li>
+    </ol>
+    <div class="form-group">
+      <div class="d-grid">
+        <a href="/user/todos/new" class="btn btn-primary d-grid col-3">作成</a>
+      </div>
+      <div class="accordion my-3" id="accordionExample">
+        {{range .Todos}}
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapse{{.ID}}" aria-expanded="false" aria-controls="collapseOne">
+              {{.Title}}
+            </button>
+          </h2>
+          <div id="collapse{{.ID}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              {{ .Content }}
+            </div>
+            <hr class="mx-4">
+            <div class="row m-3">
+              <div class="col-3">
+                <!-- <input type="text" class="form-control" placeholder="First name" aria-label="First name"> -->
+                <a href="/user/todos/edit/{{.ID}}" class="form-control btn btn-warning d-grid col-3">修正</a>
+              </div>
+              <div class="col-3">
+                <!-- <input type="text" class="form-control" placeholder="Last name" aria-label="Last name"> -->
+                <a href="/user/todos/complete/{{.ID}}" class="form-control btn btn-success d-grid col-3">完了</a>
+              </div>
+              <div class="col-3">
+                <!-- <input type="text" class="form-control" placeholder="Last name" aria-label="Last name"> -->
+                <a href="/user/todos/delete/{{.ID}}" class="form-control btn btn-danger d-grid col-3">削除</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</div>
+{{end}}
