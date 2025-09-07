@@ -1,6 +1,8 @@
 package models
 
 import (
+	"go-sample-todo/app/logs"
+	"go-sample-todo/utils"
 	"log"
 	"time"
 )
@@ -84,16 +86,60 @@ func GetUserByEmail(email string) (user User, err error) {
 	return user, err
 }
 
-func (sess *Session) GetUserBySession() (user User, err error) {
-	user = User{}
-	cmd := `select id, uuid, name, email, created_at FROM users
-	where id = ?`
-	err = Db.QueryRow(cmd, sess.UserID).Scan(
-		&user.ID,
-		&user.UUID,
-		&user.Name,
-		&user.Email,
-		&user.CreatedAt)
+func (u *User) GetTodosByUser() (todos []Todo, err error) {
+	cmd := `select id, title, content, user_id, completed_at, created_at from todos where user_id = ? and deleted_at is null and completed_at is null order by created_at desc`
 
-	return user, err
+	rows, err := Db.Query(cmd, u.ID)
+	if err != nil {
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
+	}
+	for rows.Next() {
+		var todo Todo
+		err = rows.Scan(
+			&todo.ID,
+			&todo.Title,
+			&todo.Content,
+			&todo.UserID,
+			&todo.CompletedAt,
+			&todo.CreatedAt)
+
+		if err != nil {
+			file, line, funcName := utils.GetCurrentInfo()
+			logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
+		}
+		todos = append(todos, todo)
+	}
+	rows.Close()
+
+	return todos, err
+}
+
+func (u *User) GetTodosByUserWithCompleted() (todos []Todo, err error) {
+	cmd := `select id, title, content, user_id, completed_at, created_at from todos where user_id = ? and deleted_at is null order by created_at desc`
+
+	rows, err := Db.Query(cmd, u.ID)
+	if err != nil {
+		file, line, funcName := utils.GetCurrentInfo()
+		logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
+	}
+	for rows.Next() {
+		var todo Todo
+		err = rows.Scan(
+			&todo.ID,
+			&todo.Title,
+			&todo.Content,
+			&todo.UserID,
+			&todo.CompletedAt,
+			&todo.CreatedAt)
+
+		if err != nil {
+			file, line, funcName := utils.GetCurrentInfo()
+			logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
+		}
+		todos = append(todos, todo)
+	}
+	rows.Close()
+
+	return todos, err
 }

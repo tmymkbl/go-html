@@ -17,14 +17,18 @@ type Todo struct {
 	DeletedAt   time.Time
 }
 
-func (u *User) CreateTodo(title string, content string) (err error) {
+func NewTodo() *Todo {
+	return &Todo{}
+}
+
+func (todo *Todo) CreateTodo(ID int) (err error) {
 	cmd := `insert into todos (
 		title, 
 		content, 
 		user_id, 
 		created_at) values (?, ?, ?, ?)`
 
-	_, err = Db.Exec(cmd, title, content, u.ID, time.Now())
+	_, err = Db.Exec(cmd, todo.Title, todo.Content, ID, time.Now())
 	if err != nil {
 		file, line, funcName := utils.GetCurrentInfo()
 		logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
@@ -32,11 +36,11 @@ func (u *User) CreateTodo(title string, content string) (err error) {
 	return err
 }
 
-func (u *User) GetTodo(id int) (todo Todo, err error) {
+func (todo *Todo) GetTodo(user_id int) (err error) {
 	cmd := `select id, title, content, user_id from todos
-	where user_id = ? and id = ? and deleted_at is null`
-	todo = Todo{}
-	err = Db.QueryRow(cmd, u.ID, id).Scan(
+	where id = ? and user_id = ? and deleted_at is null`
+	// todo = Todo{}
+	err = Db.QueryRow(cmd, todo.ID, user_id).Scan(
 		&todo.ID,
 		&todo.Title,
 		&todo.Content,
@@ -46,14 +50,14 @@ func (u *User) GetTodo(id int) (todo Todo, err error) {
 		logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
 	}
 
-	return todo, err
+	return err
 }
 
-func (u *User) GetTodoWithCompleted(id int) (todo Todo, err error) {
+func (todo *Todo) GetTodoWithCompleted(user_id int) (err error) {
 	cmd := `select id, title, content, user_id, completed_at, created_at from todos
 	where id = ? and user_id = ? and deleted_at is null and completed_at is not null`
-	todo = Todo{}
-	err = Db.QueryRow(cmd, id, u.ID).Scan(
+	// todo = Todo{}
+	err = Db.QueryRow(cmd, todo.ID, user_id).Scan(
 		&todo.ID,
 		&todo.Title,
 		&todo.Content,
@@ -63,12 +67,12 @@ func (u *User) GetTodoWithCompleted(id int) (todo Todo, err error) {
 		&todo.UpdatedAt,
 		&todo.DeletedAt)
 
-	return todo, err
+	return err
 }
 
-func (u *User) GetTodos() (todos []Todo, err error) {
+func (t *Todo) GetTodos(user_id int) (todos []Todo, err error) {
 	cmd := `select id, title, content, user_id, completed_at, created_at from todos where user_id = ? and deleted_at is null and completed_at is null order by created_at desc`
-	rows, err := Db.Query(cmd)
+	rows, err := Db.Query(cmd, user_id)
 	if err != nil {
 		file, line, funcName := utils.GetCurrentInfo()
 		logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
@@ -82,67 +86,6 @@ func (u *User) GetTodos() (todos []Todo, err error) {
 			&todo.UserID,
 			&todo.CompletedAt,
 			&todo.CreatedAt)
-		if err != nil {
-			file, line, funcName := utils.GetCurrentInfo()
-			logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
-		}
-		todos = append(todos, todo)
-	}
-	rows.Close()
-
-	return todos, err
-}
-
-func (u *User) GetTodosByUser() (todos []Todo, err error) {
-	cmd := `select id, title, content, user_id, completed_at, created_at from todos where user_id = ? and deleted_at is null and completed_at is null order by created_at desc`
-
-	rows, err := Db.Query(cmd, u.ID)
-	if err != nil {
-		file, line, funcName := utils.GetCurrentInfo()
-		logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
-	}
-	for rows.Next() {
-		var todo Todo
-		err = rows.Scan(
-			&todo.ID,
-			&todo.Title,
-			&todo.Content,
-			&todo.UserID,
-			&todo.CompletedAt,
-			&todo.CreatedAt)
-
-		if err != nil {
-			file, line, funcName := utils.GetCurrentInfo()
-			logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
-		}
-		// contentHtml := template.HTML(todo.Content)
-		// todo.Content = string(contentHtml)
-		// todo.Content = string(template.HTML(todo.Content))
-		todos = append(todos, todo)
-	}
-	rows.Close()
-
-	return todos, err
-}
-
-func (u *User) GetTodosByUserWithCompleted() (todos []Todo, err error) {
-	cmd := `select id, title, content, user_id, completed_at, created_at from todos where user_id = ? and deleted_at is null order by created_at desc`
-
-	rows, err := Db.Query(cmd, u.ID)
-	if err != nil {
-		file, line, funcName := utils.GetCurrentInfo()
-		logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
-	}
-	for rows.Next() {
-		var todo Todo
-		err = rows.Scan(
-			&todo.ID,
-			&todo.Title,
-			&todo.Content,
-			&todo.UserID,
-			&todo.CompletedAt,
-			&todo.CreatedAt)
-
 		if err != nil {
 			file, line, funcName := utils.GetCurrentInfo()
 			logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)

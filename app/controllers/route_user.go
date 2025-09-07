@@ -6,7 +6,6 @@ import (
 	"go-sample-todo/app/views"
 	"go-sample-todo/utils"
 	"io"
-	"log"
 	"net/http"
 	"os"
 )
@@ -171,18 +170,20 @@ func todoSave(w http.ResponseWriter, r *http.Request) {
 	} else {
 		err = r.ParseForm()
 		if err != nil {
-			log.Println(err)
-
+			file, line, funcName := utils.GetCurrentInfo()
+			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
 		}
 		user, err := sess.GetUserBySession()
 		if err != nil {
-			log.Println(err)
+			file, line, funcName := utils.GetCurrentInfo()
+			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
 		}
-		title := r.PostFormValue("title")
-		content := r.PostFormValue("content")
-		if err := user.CreateTodo(title, content); err != nil {
-			log.Println(err)
-
+		t := models.NewTodo()
+		t.Title = r.PostFormValue("title")
+		t.Content = r.PostFormValue("content")
+		if err := t.CreateTodo(user.ID); err != nil {
+			file, line, funcName := utils.GetCurrentInfo()
+			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
 		}
 		http.Redirect(w, r, "/user/todos", http.StatusFound)
 	}
@@ -205,12 +206,9 @@ func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
 			file, line, funcName := utils.GetCurrentInfo()
 			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
 		}
-		user, err := sess.GetUserBySession()
-		if err != nil {
-			file, line, funcName := utils.GetCurrentInfo()
-			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
-		}
-		todo, err := user.GetTodo(id)
+		todo := models.NewTodo()
+		todo.ID = id
+		err := todo.GetTodo(sess.UserID)
 		if err != nil {
 			file, line, funcName := utils.GetCurrentInfo()
 			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
@@ -218,7 +216,7 @@ func todoEdit(w http.ResponseWriter, r *http.Request, id int) {
 		data := Data{
 			Sess:   sess,
 			TodoId: id,
-			Todos:  todo,
+			Todos:  *todo,
 		}
 		views.GenerateUserHTML(w, data, "user_layout", "head", "nav", "sidenav", "todo_edit", "footer", "scripts")
 	}
@@ -258,17 +256,10 @@ func todoComplete(w http.ResponseWriter, r *http.Request, id int) {
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
-		user, err := sess.GetUserBySession()
-		if err != nil {
-			file, line, funcName := utils.GetCurrentInfo()
-			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
-		}
-		t, err := user.GetTodo(id)
-		if err != nil {
-			file, line, funcName := utils.GetCurrentInfo()
-			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
-		}
-		if err := t.CompleteTodo(); err != nil {
+		todo := models.NewTodo()
+		todo.ID = id
+		todo.UserID = sess.UserID
+		if err := todo.CompleteTodo(); err != nil {
 			file, line, funcName := utils.GetCurrentInfo()
 			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
 		}
@@ -281,17 +272,10 @@ func todoDelete(w http.ResponseWriter, r *http.Request, id int) {
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
-		user, err := sess.GetUserBySession()
-		if err != nil {
-			file, line, funcName := utils.GetCurrentInfo()
-			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
-		}
-		t, err := user.GetTodo(id)
-		if err != nil {
-			file, line, funcName := utils.GetCurrentInfo()
-			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
-		}
-		if err := t.DeleteTodo(); err != nil {
+		todo := models.NewTodo()
+		todo.ID = id
+		todo.UserID = sess.UserID
+		if err := todo.DeleteTodo(); err != nil {
 			file, line, funcName := utils.GetCurrentInfo()
 			logs.Log.Error("main ConnectDB ", "error", err, "file", file, "line", line, "funcName", funcName)
 		}
