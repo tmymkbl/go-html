@@ -20,7 +20,7 @@
           </h2>
           <div id="collapse{{.ID}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              {{ .Content }}
+              <div>{{ .Content | unescape }}</div>
             </div>
             <hr class="mx-4">
             <div class="row m-3">

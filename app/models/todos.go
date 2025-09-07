@@ -115,6 +115,9 @@ func (u *User) GetTodosByUser() (todos []Todo, err error) {
 			file, line, funcName := utils.GetCurrentInfo()
 			logs.Log.Error("Connect DB ", "error", err, "database", "golang", "funcName", funcName, "file", file, "line", line)
 		}
+		// contentHtml := template.HTML(todo.Content)
+		// todo.Content = string(contentHtml)
+		// todo.Content = string(template.HTML(todo.Content))
 		todos = append(todos, todo)
 	}
 	rows.Close()
