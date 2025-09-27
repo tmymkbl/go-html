@@ -35,8 +35,10 @@ func setLog(f io.Writer) {
 		Log.Info("info Logging start", "output", config.Config.LogOutput, "file", config.Config.LogFile)
 	case "warn":
 		Log = slog.New(slog.NewTextHandler(f, &slog.HandlerOptions{Level: slog.LevelWarn}))
+		Log.Warn("warn Logging start", "output", config.Config.LogOutput, "file", config.Config.LogFile)
 	case "error":
 		Log = slog.New(slog.NewTextHandler(f, &slog.HandlerOptions{Level: slog.LevelError}))
+		Log.Error("error Logging start", "output", config.Config.LogOutput, "file", config.Config.LogFile)
 	default:
 		Log = slog.New(slog.NewTextHandler(f, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	}

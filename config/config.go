@@ -3,6 +3,7 @@ package config
 import (
 	"go-sample-todo/utils"
 	"log"
+	"os"
 
 	"gopkg.in/go-ini/ini.v1"
 )
@@ -18,6 +19,7 @@ type ConfigList struct {
 	DbPort       string
 	Static       string
 	Assets       string
+	ViewsPath    string
 	AdminURL     string
 	LogOutput    string
 	LogFile      string
@@ -36,7 +38,7 @@ func init() {
 }
 
 func LoadConfig() {
-	cfg, err := ini.Load("config.ini")
+	cfg, err := ini.Load(os.Getenv("APP_PATH") + "/config.ini")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -51,8 +53,9 @@ func LoadConfig() {
 		DbPort:       cfg.Section("db").Key("port").String(),
 		Static:       cfg.Section("web").Key("static").String(),
 		Assets:       cfg.Section("web").Key("assets").String(),
+		ViewsPath:    os.Getenv("APP_PATH") + cfg.Section("web").Key("views_path").String(),
 		AdminURL:     cfg.Section("web").Key("admin_url").String(),
-		LogFile:      cfg.Section("logging").Key("file").MustString(""),
+		LogFile:      os.Getenv("APP_PATH") + cfg.Section("logging").Key("file").MustString(""),
 		LogLevel:     cfg.Section("logging").Key("level").MustString("info"),
 		LogOutput:    cfg.Section("logging").Key("output").MustString("stdout"),
 		CookieSecure: cfg.Section("secure").Key("cookie_secure").MustBool(false),

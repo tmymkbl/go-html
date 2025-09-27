@@ -2,6 +2,7 @@ package views
 
 import (
 	"fmt"
+	"go-sample-todo/config"
 	"html/template"
 	"net/http"
 	"strings"
@@ -49,7 +50,7 @@ var TemplateFuncs map[string]any = map[string]any{
 func GeneratePublicHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/public/%s.html", file))
+		files = append(files, fmt.Sprintf(config.Config.ViewsPath+"/public/%s.html", file))
 	}
 
 	templates := template.Must(template.ParseFiles(files...))
@@ -59,7 +60,7 @@ func GeneratePublicHTML(w http.ResponseWriter, data interface{}, filenames ...st
 func GenerateErrorHTML(writer http.ResponseWriter, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/%s.html", file))
+		files = append(files, fmt.Sprintf(config.Config.ViewsPath+"/%s.html", file))
 	}
 	templates := template.Must(template.ParseFiles(files...))
 	templates.ExecuteTemplate(writer, "content", nil)
@@ -68,7 +69,7 @@ func GenerateErrorHTML(writer http.ResponseWriter, filenames ...string) {
 func GenerateAuthHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/auth/%s.html", file))
+		files = append(files, fmt.Sprintf(config.Config.ViewsPath+"/auth/%s.html", file))
 	}
 
 	templates := template.Must(template.ParseFiles(files...))
@@ -78,18 +79,18 @@ func GenerateAuthHTML(writer http.ResponseWriter, data interface{}, filenames ..
 func GenerateUserHTML(w http.ResponseWriter, data any, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
-		fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
+		// fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/users/%s.html", file))
+		files = append(files, fmt.Sprintf(config.Config.ViewsPath+"/users/%s.html", file))
 	}
-	templates := template.Must(template.New("todo").Funcs(TemplateFuncs).ParseFiles(files...))
+	templates := template.Must(template.New("user").Funcs(TemplateFuncs).ParseFiles(files...))
 	templates.ExecuteTemplate(w, "user_layout", data)
 }
 
 func GenerateAdminHTML(writer http.ResponseWriter, data any, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
-		fmt.Println("Output: " + fmt.Sprintf("app/views/template_bootstrap/admin/%s.html", file))
-		files = append(files, fmt.Sprintf("app/views/template_bootstrap/admin/%s.html", file))
+		fmt.Println("Output: " + fmt.Sprintf(config.Config.ViewsPath+"/admin/%s.html", file))
+		files = append(files, fmt.Sprintf(config.Config.ViewsPath+"/admin/%s.html", file))
 	}
 	templates := template.Must(template.ParseFiles(files...))
 	templates.ExecuteTemplate(writer, "admin_layout", data)
