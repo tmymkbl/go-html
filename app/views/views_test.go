@@ -1,5 +1,13 @@
 package views
 
+// テストの実行方法
+// 1.テストを実行する（オプションとかは以下）
+// # go test -v ./app/views/ -cover -coverprofile=cover.out
+// 2.カバレッジレポートの表示
+// # go tool cover -html=cover.out -o cover.html
+// 3.カバレッジレポートの削除
+// # rm cover.out cover.html
+
 import (
 	"bytes"
 	"fmt"
